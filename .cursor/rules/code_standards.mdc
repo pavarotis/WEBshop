@@ -1,0 +1,107 @@
+---
+description: Code Standards - PHP, Database, Filament & Testing Guidelines
+globs: ["**/app/**/*.php", "**/database/migrations/*.php", "**/database/seeders/*.php"]
+alwaysApply: true
+---
+
+# Code Standards
+
+## PHP Standards
+- **PSR-12 compliance** για όλον τον PHP κώδικα
+- **Type hints** σε όλες τις μεθόδους και properties όπου είναι δυνατό
+- **Strict typing** με `declare(strict_types=1);` στα αρχεία
+- **Όλος ο κώδικας και τα σχόλια να είναι στα αγγλικά**
+
+## Database & Eloquent
+- **Προτίμησε Eloquent relationships** αντί για raw queries
+- **Query optimization** με eager loading (`with()`, `load()`)
+- **Database migrations** για κάθε schema change
+- **Model factories** για testing data
+- **Πάντα να συμπεριλαμβάνεις timestamps** (`created_at`, `updated_at`)
+- **Soft deletes** όπου χρειάζεται (`deleted_at`)
+- **Foreign keys** με proper constraints
+- **Indexes** για performance optimization
+
+```php
+// Migration example
+Schema::create('products', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->text('description')->nullable();
+    $table->decimal('price', 10, 2);
+    $table->foreignId('category_id')->constrained()->onDelete('cascade');
+    $table->timestamps();
+    $table->softDeletes();
+    
+    $table->index(['category_id', 'created_at']);
+});
+```
+
+## Database Seeders
+- **Χρησιμοποίησε factories** για data generation
+- **Realistic data** με proper relationships
+- **Batch operations** για performance
+- **Conditional seeding** για different environments
+
+```php
+// Seeder example
+public function run(): void
+{
+    Category::factory(10)->create()->each(function ($category) {
+        Product::factory(5)->create(['category_id' => $category->id]);
+    });
+}
+```
+
+## Filament Admin Panel (Primary Focus)
+- **Filament Resources** για όλα τα CRUD operations (όχι controller + blade)
+- **Filament Tables** με advanced features (sorting, filtering, pagination)
+- **Filament Actions** για custom operations (modals, bulk actions, custom buttons)
+- **Filament Forms** με validation και conditional fields
+- **Resource organization** με logical grouping και proper relationships
+- **Table columns** με custom renderers και formatters
+- **Action groups** για organized functionality
+
+## Custom API Development (Secondary Focus)
+- **Controllers** για API endpoints με proper HTTP methods
+- **Service Layer** για business logic και data processing
+- **DTOs (Data Transfer Objects)** για structured API responses
+- **API Resources** για consistent response formatting
+- **Request Validation** με Form Request classes
+- **API Versioning** για backward compatibility
+
+## Testing Standards
+- **Pest tests** για όλα τα test cases
+- **Feature tests** για API endpoints
+- **Unit tests** για business logic
+- **Database tests** με proper setup/teardown
+
+```php
+// Pest test example
+it('can create a product', function () {
+    $category = Category::factory()->create();
+    
+    $product = Product::factory()->create([
+        'category_id' => $category->id
+    ]);
+    
+    expect($product->category)->toBeInstanceOf(Category::class);
+    expect($product->category_id)->toBe($category->id);
+});
+```
+
+## Code Quality
+- **Type hints** σε όλες τις μεθόδους
+- **Return types** για functions
+- **DocBlocks** για complex methods
+- **Consistent formatting** με PSR-12
+- **Single Responsibility Principle** για κάθε class
+- **Dependency Injection** όπου χρειάζεται
+
+## Code Examples
+- **Πραγματικά Laravel/Filament ready** παραδείγματα
+- **Filament-first approach** με Resources, Tables, Actions
+- **API-ready examples** με Controllers, Services, DTOs
+- **Production-ready code** με proper error handling
+- **Complete examples** με imports και dependencies
+- **Best practices** implementation

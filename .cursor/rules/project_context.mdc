@@ -1,0 +1,39 @@
+---
+description: Project Context - Laravel + Filament + AI e-shop overview
+globs: ["**/*.php", "**/*.blade.php"]
+alwaysApply: true
+---
+
+# Project Context
+
+## Project Overview
+Το project είναι ένα e-shop βασισμένο σε:
+- **Laravel 12** - Backend framework
+- **Filament 4** - Admin panel (αποκλειστικά)
+- **Livewire 3** - Frontend components με optimization
+- **TailwindCSS** - Styling framework
+
+## Package Versions (Pinned)
+- **Laravel**: ^12.0
+- **Filament**: ^4.0
+- **Livewire**: ^3.0
+- **stancl/tenancy**: ^3.0
+- **openai-php/laravel**: ^1.0
+- **TailwindCSS**: ^3.0
+
+## Architecture
+- **Multi-tenant backend** με χρήση `stancl/tenancy`
+- **Admin panel** φτιάχνεται αποκλειστικά με Filament (όχι Nova ή Backpack)
+- **AI modules** με OpenAI API και `openai-php/laravel`
+
+## Key Technologies
+- Query caching για performance
+- Pagination για μεγάλα datasets
+- Debouncing για user interactions
+- Livewire 3 optimizations
+
+## File Patterns
+- PHP files για Laravel backend
+- Blade templates για views
+- JavaScript/TypeScript για frontend
+- Vue components όπου χρειάζεται

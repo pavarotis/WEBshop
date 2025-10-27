@@ -1,0 +1,87 @@
+---
+description: Security & Architecture Guidelines - Multi-tenant Laravel e-shop
+globs: ["**/*.php", "**/*.blade.php", "**/routes/*.php", "**/app/Http/Controllers/*.php", "**/app/Policies/*.php"]
+alwaysApply: true
+---
+
+# Security / Architecture
+
+## Access Control
+- **Policies και Gates** για έλεγχο πρόσβασης σε όλες τις λειτουργίες
+- **Authorization checks** σε controllers, views και API endpoints
+- **Role-based permissions** με Spatie Laravel Permission
+- **Middleware protection** για sensitive routes
+
+## Multi-tenant Security
+- **Tenant isolation** με `tenant_id` ή database per tenant
+- **Data segregation** μεταξύ των tenants
+- **Tenant context validation** σε κάθε request
+- **Cross-tenant data leakage prevention**
+
+## Form Security
+- **Form Request Validation** για όλες τις φόρμες
+- **CSRF protection** σε όλα τα forms
+- **Input sanitization** και validation rules
+- **File upload security** με type και size restrictions
+
+## API Security
+- **Laravel Sanctum** για API authentication
+- **Token-based authentication** για SPA και mobile
+- **Rate limiting** για API endpoints
+- **CORS configuration** για cross-origin requests
+
+## Database Security
+- **Prepared statements** για όλα τα queries
+- **Mass assignment protection** με `$fillable` και `$guarded`
+- **Soft deletes** για data retention
+- **Database encryption** για sensitive data
+
+## Authentication & Authorization
+- **Multi-factor authentication** για admin users
+- **Session security** με proper configuration
+- **Password policies** και hashing
+- **Login attempt limiting** και account lockout
+
+## File & Upload Security
+- **File type validation** και MIME type checking
+- **Upload path security** εκτός public directory
+- **Virus scanning** για uploaded files
+- **Storage encryption** για sensitive files
+
+## Environment Security
+- **Environment variables** για sensitive configuration
+- **API keys protection** και rotation
+- **Database credentials** security
+- **Logging security** χωρίς sensitive data
+
+## Monitoring & Logging
+- **Security event logging** για suspicious activities
+- **Failed login attempts** tracking
+- **API usage monitoring** και anomaly detection
+- **Error handling** χωρίς information disclosure
+
+## Compliance & Standards
+- **GDPR compliance** για data protection
+- **PCI DSS** για payment processing
+- **OWASP guidelines** για web security
+- **Regular security audits** και penetration testing
+
+```php
+// Multi-tenant security middleware
+class TenantSecurityMiddleware
+{
+    public function handle($request, Closure $next)
+    {
+        // Verify tenant context
+        if (!tenant()) {
+            abort(403, 'Tenant context required');
+        }
+        
+        // Verify user belongs to current tenant
+        if (auth()->check() && auth()->user()->tenant_id !== tenant('id')) {
+            abort(403, 'Access denied for this tenant');
+        }
+        
+        return $next($request);
+    }
+}

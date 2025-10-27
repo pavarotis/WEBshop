@@ -1,0 +1,53 @@
+---
+description: Performance & Optimization - Caching, Query Optimization & Asset Management
+globs: ["**/*.php", "**/*.blade.php", "**/*.js", "**/*.css", "**/config/cache.php", "**/config/queue.php"]
+alwaysApply: true
+ignore: ["**/config/app.php", "**/config/database.php", "**/node_modules/**", "**/storage/**"]
+---
+
+# Performance & Optimization
+
+## Purpose
+Performance optimization strategies, caching mechanisms, and asset management for scalable application performance.
+
+## Caching Strategies
+- **Redis caching** για expensive operations
+- **Application cache** για computed values
+- **Query result caching** για database operations
+- **Response caching** για API endpoints
+- **Cache invalidation** strategies
+
+```php
+// Cache expensive calculations
+$totalPrice = Cache::remember("cart_total_{$userId}", 3600, function() {
+    return $this->calculateCartTotal();
+});
+```
+
+## Query Optimization
+- **Eager loading** για relationships (`with()`, `load()`)
+- **N+1 query prevention** με proper loading
+- **Query scopes** για reusable conditions
+- **Database indexes** για frequently queried columns
+- **Query monitoring** και optimization
+
+## Asset Optimization
+- **Image optimization** με proper sizing
+- **CSS/JS minification** για production
+- **Code splitting** με Vite για smaller bundles
+- **Lazy loading** για non-critical assets
+- **CDN usage** για static assets
+
+## Background Processing
+- **Queue optimization** με proper job batching
+- **Job prioritization** για critical tasks
+- **Laravel Horizon** για queue monitoring
+- **Retry mechanisms** για failed jobs
+- **Job scheduling** για recurring tasks
+
+## Performance Monitoring
+- **Performance monitoring** με Laravel Telescope
+- **Query performance** tracking
+- **Cache hit rates** monitoring
+- **API response times** tracking
+- **Error rate** monitoring

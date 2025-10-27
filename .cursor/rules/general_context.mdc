@@ -1,0 +1,145 @@
+---
+description: Γενικός κανόνας - Context & Multi-tenant Assumptions
+globs: ["**/*.php", "**/*.blade.php", "**/*.js", "**/*.vue", "**/*.ts"]
+alwaysApply: true
+---
+
+# Γενικός κανόνας
+
+## Context Requirements
+- **Αν δεν υπάρχει αρκετό context, ρώτα με πριν παράγεις κώδικα**
+- **Clarify requirements** πριν την implementation
+- **Ask for specific details** όταν είναι ασαφή
+- **Confirm assumptions** πριν προχωρήσεις
+
+### Context Questions Examples
+```php
+// Ask before implementing:
+// - What specific fields are needed?
+// - What validation rules apply?
+// - What relationships exist?
+// - What permissions are required?
+```
+
+## Multi-tenant Assumptions
+- **Αν το feature σχετίζεται με προϊόντα, πελάτες ή παραγγελίες, να υποθέτεις ότι είμαστε μέσα σε multi-tenant περιβάλλον**
+- **Tenant isolation** για όλα τα business data
+- **Tenant context** σε κάθε operation
+- **Cross-tenant data protection**
+
+### Multi-tenant Exceptions (Global Resources)
+```php
+// Global admin settings - NOT tenant-specific
+class AppSetting extends Model
+{
+    protected $fillable = ['key', 'value']; // No tenant_id
+}
+
+// System reports - Cross-tenant analytics
+class SystemReport extends Model
+{
+    protected $fillable = ['type', 'data']; // No tenant_id
+}
+
+// Tenant context helper
+class TenantContext
+{
+    public static function current(): ?Tenant
+    {
+        return app('tenant');
+    }
+    
+    public static function validate(): void
+    {
+        if (!self::current()) {
+            throw new TenantRequiredException();
+        }
+    }
+}
+```
+
+## Default Assumptions
+- **Laravel 12** με Filament 4
+- **Multi-tenant architecture** με `stancl/tenancy`
+- **AI integration** με OpenAI API
+- **Responsive design** με TailwindCSS
+
+## When to Ask Questions
+- **Unclear requirements** για features
+- **Missing business logic** details
+- **Ambiguous user stories** ή specifications
+- **Complex relationships** μεταξύ entities
+
+## Multi-tenant Considerations
+- **Data isolation** μεταξύ tenants
+- **Tenant-specific configurations**
+- **Cross-tenant security** measures
+- **Tenant context** σε queries και operations
+
+## IDE Guidelines
+- **Κράτησε το ίδιο αποτέλεσμα** χωρίς να αλλάξεις business logic
+- **Preserve functionality** κατά τη διάρκεια refactoring
+- **Make small changes step by step**
+- **Ask for agreement before making large changes**
+- **Propose changes before implementing them**
+- **Σύντομα σχόλια (1-2 γραμμές)** για κάθε βήμα
+- **Explain the "why"** όχι μόνο το "what"
+- **Context-aware explanations** για complex logic
+
+### Feature Placement Guide (Filament-First)
+```php
+// Filament Resource - Primary choice για CRUD
+class ProductResource extends Resource
+{
+    // Admin panel CRUD operations
+    // Tables, Forms, Actions
+}
+
+// Filament Action - για custom operations
+class ExportProductsAction extends Action
+{
+    // Custom functionality
+}
+
+// Controller - μόνο για custom API endpoints
+class ProductApiController extends Controller
+{
+    // API-specific logic
+}
+
+// Service - για business logic
+class ProductService
+{
+    // Complex operations, data processing
+}
+
+// DTO - για structured API responses
+class ProductDto
+{
+    // Data transfer object
+}
+```
+
+## Code Organization
+- **Single Responsibility** για κάθε class/method
+- **Logical grouping** σε namespaces
+- **Consistent naming** conventions
+- **Proper file structure** με Laravel conventions
+
+## Error Handling
+- **Graceful degradation** για failures
+- **User-friendly messages** για errors
+- **Logging** για debugging
+- **Fallback mechanisms** όπου δυνατό
+
+## Performance Considerations
+- **Query optimization** με proper indexes
+- **Eager loading** για relationships
+- **Caching strategies** για expensive operations
+- **Pagination** για large datasets
+
+## Testing Integration
+- **Testable code** με dependency injection
+- **Mock-friendly** architecture
+- **Coverage** για critical paths
+- **Integration tests** για workflows

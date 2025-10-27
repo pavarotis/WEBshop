@@ -1,0 +1,78 @@
+description: Centralized Cursor IDE Project Rules
+globalIgnore:
+  - "**/vendor/**"
+  - "**/node_modules/**"
+  - "**/storage/**"
+  - "**/.git/**"
+  - "**/public/build/**"
+
+rules:
+  - description: AI Integration Rules - OpenAI API with Laravel
+    globs: ["**/app/Services/AI/*.php", "**/app/Jobs/*AI*.php", "**/app/Models/*AI*.php"]
+    alwaysApply: true
+    mdcReference: "rules/ai_integration.mdc"
+
+  - description: Code Standards - PHP, Database, Filament & Testing Guidelines
+    globs: ["**/app/**/*.php", "**/database/migrations/*.php", "**/database/seeders/*.php"]
+    alwaysApply: true
+    mdcReference: "rules/code_standards.mdc"
+
+  - description: Connection Management & Fallbacks - Centralized Database & Service Management
+    globs: ["**/app/Services/Connection/*.php", "**/config/database.php", "**/config/cache.php", "**/.env*"]
+    alwaysApply: true
+    mdcReference: "rules/connection_management.mdc"
+
+  - description: Deployment & DevOps - Environment Configuration, Monitoring & Backup Strategies
+    globs: ["**/.env*", "**/docker-compose.yml", "**/Dockerfile", "**/.github/workflows/*.yml", "**/config/app.php"]
+    alwaysApply: true
+    mdcReference: "rules/deployment_devops.mdc"
+
+  - description: Development Backend Setup - Laravel, Filament & API Development
+    globs: ["**/app/**/*.php", "**/config/**/*.php", "**/routes/**/*.php", "**/composer.json"]
+    alwaysApply: true
+    mdcReference: "rules/development_backend.mdc"
+
+  - description: Development Frontend Setup - Build Tools, Components & Performance
+    globs: ["**/resources/js/**/*.js", "**/resources/css/**/*.css", "**/resources/views/**/*.blade.php", "**/vite.config.js"]
+    alwaysApply: true
+    mdcReference: "rules/development_frontend.mdc"
+
+  - description: Development Storage Setup - Database, Cache, Search & Fallbacks
+    globs: ["**/.env*", "**/config/database.php", "**/config/cache.php", "**/config/queue.php"]
+    alwaysApply: true
+    mdcReference: "rules/development_storage.mdc"
+
+  - description: General Context & Multi-tenant Assumptions
+    globs: ["**/*.php", "**/*.blade.php", "**/*.js", "**/*.vue", "**/*.ts"]
+    alwaysApply: true
+    mdcReference: "rules/general_context.mdc"
+
+  - description: Livewire Performance & Optimization - Hydration, Caching & Bundle Optimization
+    globs: ["**/app/Livewire/**/*.php", "**/resources/views/livewire/**/*.blade.php", "**/resources/js/**/*.js", "**/vite.config.js"]
+    alwaysApply: true
+    mdcReference: "rules/livewire_performance.mdc"
+
+  - description: Performance & Optimization Guidelines - Caching, Queries & Asset Optimization
+    globs: ["**/*.php", "**/*.blade.php", "**/*.js", "**/*.css", "**/config/cache.php", "**/config/queue.php"]
+    alwaysApply: true
+    mdcReference: "rules/performance_optimization.mdc"
+
+  - description: Project Context - Laravel + Filament + AI e-shop overview
+    globs: ["**/*.php", "**/*.blade.php"]
+    alwaysApply: true
+    mdcReference: "rules/project_context.mdc"
+
+  - description: Security & Architecture Guidelines - Multi-tenant Laravel e-shop
+    globs: ["**/*.php", "**/*.blade.php", "**/routes/*.php", "**/app/Http/Controllers/*.php", "**/app/Policies/*.php"]
+    alwaysApply: true
+    mdcReference: "rules/security_architecture.mdc"
+
+  - description: Security Policies & Access Control - Standardized Policies, Error Responses & Upload Limits
+    globs: ["**/app/Policies/*.php", "**/app/Http/Controllers/*.php", "**/app/Http/Requests/*.php", "**/config/filesystems.php"]
+    alwaysApply: true
+    mdcReference: "rules/security_access.mdc"
+
+  - description: Testing & Quality Assurance - Strategies, Coverage & CI/CD Guidelines
+    globs: ["**/tests/**/*.php", "**/*Test.php", "**/phpunit.xml", "**/.github/workflows/*.yml"]
+    alwaysApply: true
+    mdcReference: "rules/testing_qa.mdc"

@@ -1,0 +1,94 @@
+---
+description: AI Integration Rules - OpenAI API with Laravel
+globs: ["**/app/Services/AI/*.php", "**/app/Jobs/*AI*.php", "**/app/Models/*AI*.php"]
+alwaysApply: true
+---
+
+# AI Integration Rules
+
+## OpenAI API Usage
+- **Χρησιμοποίησε `OpenAI::chat()`** από το `openai-php/laravel` package
+- **Μην χρησιμοποιείς απευθείας cURL** για AI calls
+- **API key configuration** μέσω environment variables
+- **Error handling** για API failures και rate limits
+
+## Service Architecture
+- **AIService class** στο `app/Services/AI/` για modular χρήση
+- **Dependency injection** για AI services
+- **Interface-based design** για testability
+- **Service provider registration** για proper binding
+
+## Data Storage
+- **AI responses** να αποθηκεύονται στη βάση σε JSON πεδίο
+- **Structured JSON format** για consistent data
+- **Metadata tracking** (timestamp, model version, tokens used)
+- **Response caching** για duplicate requests
+
+## Request Handling
+```php
+// Correct usage example
+use OpenAI\Laravel\Facades\OpenAI;
+
+$response = OpenAI::chat()->create([
+    'model' => 'gpt-4',
+    'messages' => [
+        ['role' => 'user', 'content' => $prompt]
+    ],
+    'max_tokens' => 1000,
+    'temperature' => 0.7
+]);
+```
+
+## Error Management
+- **Try-catch blocks** για API calls
+- **Fallback responses** για API failures
+- **Logging** για debugging και monitoring
+- **Retry mechanisms** για temporary failures
+
+## Performance Optimization
+- **Async processing** με Laravel Queues για heavy AI tasks
+- **Response caching** για identical requests
+- **Token usage tracking** για cost management
+- **Rate limiting** για API quota management
+
+## Security & Privacy Considerations
+- **Input sanitization** για AI prompts
+- **Output validation** για AI responses
+- **API key protection** και rotation
+- **GDPR compliance** για AI data storage
+- **PII stripping** πριν αποθήκευση AI responses
+- **Data anonymization** για sensitive content
+
+```php
+// PII stripping example
+class AIService
+{
+    public function stripPII(string $content): string
+    {
+        // Remove emails, phone numbers, personal names
+        $content = preg_replace('/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/', '[EMAIL]', $content);
+        $content = preg_replace('/\b\d{3}-\d{3}-\d{4}\b/', '[PHONE]', $content);
+        
+        return $content;
+    }
+}
+```
+
+## Queue Management
+- **Queue prioritization** για AI jobs (high priority)
+- **Laravel Horizon** για queue monitoring
+- **Job batching** για multiple AI requests
+- **Retry mechanisms** με exponential backoff
+- **Dead letter queue** για failed AI jobs
+
+## Testing
+- **Mock AI responses** για unit tests
+- **Integration tests** με OpenAI API
+- **Performance testing** για response times
+- **Error scenario testing**
+
+## Configuration
+- **Environment-based** model selection
+- **Configurable parameters** (temperature, max_tokens)
+- **Multiple model support** (GPT-4, GPT-3.5-turbo)
+- **Custom endpoints** για different use cases

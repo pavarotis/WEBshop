@@ -1,0 +1,128 @@
+---
+description: Development Frontend Setup - Build Tools, Components & Performance
+globs: ["**/resources/js/**/*.js", "**/resources/css/**/*.css", "**/resources/views/**/*.blade.php", "**/vite.config.js"]
+alwaysApply: true
+---
+
+# Development Frontend Setup
+
+## Build Tools & Environment
+- **Node.js + npm/yarn** για frontend build tools
+- **Vite** για asset bundling και development server
+- **TailwindCSS** για styling framework
+- **Laravel Mix** ή **Vite** για asset compilation
+
+## Component Architecture
+- **Livewire 3** για dynamic components με optimization
+- **Alpine.js** για lightweight JavaScript interactions
+- **Blade components** για reusable UI elements
+- **Μην χρησιμοποιείς inline scripts** - μόνο Livewire ή Alpine.js
+
+## Performance Optimization
+- **Code splitting** με Vite για smaller chunks
+- **Dynamic imports** για lazy loading components
+- **Route-based splitting** για better performance
+- **Bundle optimization** με tree shaking
+- **Lazy loading** για non-critical features
+
+```javascript
+// Dynamic import example
+const ProductChart = lazy(() => import('./ProductChart'));
+
+// Route-based splitting
+const ProductRoutes = lazy(() => import('./routes/ProductRoutes'));
+```
+
+## Responsive Design
+- **Mobile-first approach** με TailwindCSS
+- **Breakpoint consistency** με Tailwind standards
+- **Touch-friendly interfaces** για mobile devices
+- **Responsive grid** και layout systems
+
+## UX / UI Guidelines
+- **Όλες οι σελίδες να είναι responsive** με TailwindCSS
+- **Mobile-first approach** για design
+- **Breakpoint consistency** με Tailwind standards
+- **Touch-friendly interfaces** για mobile devices
+- **Καθαρό minimal design** με clean aesthetics
+- **Consistent spacing** με Tailwind spacing scale
+- **Color harmony** με Tailwind color palette
+- **Typography hierarchy** με proper font weights
+
+### Tailwind Responsive Classes
+```html
+<!-- Responsive grid example -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- Content -->
+</div>
+
+<!-- Responsive text sizing -->
+<h1 class="text-2xl md:text-3xl lg:text-4xl font-bold">
+    Responsive Heading
+</h1>
+```
+
+## Icon Usage
+- **Heroicons** για standard icons
+- **Filament Icons** για admin panel
+- **Consistent icon sizing** με Tailwind classes
+- **Accessible icons** με proper labels
+
+### Icon Implementation
+```html
+<!-- Heroicons example -->
+<x-heroicon-o-user class="w-6 h-6 text-gray-600" />
+
+<!-- Filament Icons example -->
+<x-filament::icon name="heroicon-o-cog" class="w-5 h-5" />
+```
+
+## Modal Implementation
+- **Filament actions (modals)** για όλα τα modals
+- **Μην χρησιμοποιείς custom JS** για modal functionality
+- **Consistent modal behavior** με Filament standards
+- **Accessible modals** με proper focus management
+
+### Filament Modal Example
+```php
+// Filament Action with Modal
+public static function table(Table $table): Table
+{
+    return $table
+        ->actions([
+            Action::make('edit')
+                ->modal()
+                ->form([
+                    TextInput::make('name')
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    // Handle form submission
+                }),
+        ]);
+}
+```
+
+## User Experience Guidelines
+- **Intuitive navigation** με clear hierarchy
+- **Loading states** για async operations
+- **Error handling** με user-friendly messages
+- **Success feedback** για user actions
+
+## Accessibility Standards
+- **ARIA labels** για interactive elements
+- **Keyboard navigation** support
+- **Color contrast** compliance
+- **Screen reader** compatibility
+
+## Component Consistency
+- **Reusable components** με Blade components
+- **Design system** με consistent patterns
+- **Button styles** με Tailwind variants
+- **Form elements** με unified styling
+
+## Mobile Optimization
+- **Touch targets** με minimum 44px size
+- **Swipe gestures** όπου appropriate
+- **Mobile navigation** με hamburger menu
+- **Thumb-friendly** button placement

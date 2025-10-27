@@ -1,0 +1,75 @@
+---
+description: Development Backend Setup - Laravel, Filament & API Development
+globs: ["**/app/**/*.php", "**/config/**/*.php", "**/routes/**/*.php", "**/composer.json"]
+alwaysApply: true
+---
+
+# Development Backend Setup
+
+## Core Framework
+- **Laravel 12** για backend framework
+- **Composer** για dependency management
+- **PHP 8.1+** με proper configuration
+- **PSR-12 compliance** για coding standards
+
+## Admin Panel (Filament-First)
+- **Filament 4** αποκλειστικά για admin panel
+- **Filament Resources** για CRUD operations (όχι controller + blade)
+- **Filament Tables** με advanced features (sorting, filtering, pagination)
+- **Filament Actions** για custom operations (modals, bulk actions)
+- **Filament Forms** με validation και conditional fields
+
+## API Development
+- **Controllers** για API endpoints με proper HTTP methods
+- **Service Layer** για business logic και data processing
+- **DTOs (Data Transfer Objects)** για structured API responses
+- **API Resources** για consistent response formatting
+- **Request Validation** με Form Request classes
+
+## Background Processing
+- **Laravel Queues** με Redis driver για background jobs
+- **Job classes** στο `app/Jobs/`
+- **Queue monitoring** και error handling
+- **Retry mechanisms** για failed jobs
+- **Fallback**: Sync queue driver για development
+
+## AI Integration
+- **Service classes** στο `app/Services/AI/` για AI λειτουργίες
+- **OpenAI API** με `openai-php/laravel` package
+- **Error handling** για API failures
+- **Rate limiting** για API calls
+
+## Multi-tenant Architecture
+- **stancl/tenancy** για multi-tenant support
+- **Tenant isolation** για όλα τα business data
+- **Tenant context** σε κάθε operation
+- **Cross-tenant data protection**
+
+## Development Tools
+- **Artisan commands** για development tasks
+- **Tinker** για interactive PHP shell
+- **Debugging tools** (Laravel Debugbar, Telescope)
+- **Testing environment** με Pest framework
+
+```php
+// Filament resource example
+class ProductResource extends Resource
+{
+    public static function getModel(): string
+    {
+        return Product::class;
+    }
+    
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('price')
+                    ->numeric()
+                    ->required(),
+            ]);
+    }
+}

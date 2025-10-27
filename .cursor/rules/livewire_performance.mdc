@@ -1,0 +1,52 @@
+---
+description: Livewire Performance & Optimization - Hydration, Caching & Bundle Optimization
+globs: ["**/app/Livewire/**/*.php", "**/resources/views/livewire/**/*.blade.php", "**/resources/js/**/*.js", "**/vite.config.js"]
+alwaysApply: true
+ignore: ["**/node_modules/**", "**/public/**", "**/storage/**"]
+---
+
+# Livewire Performance & Optimization
+
+## Purpose
+Livewire 3 performance optimization, hydration strategies, and bundle optimization for responsive user experience.
+
+## Livewire Optimization
+- **Component caching** με `@livewireCache` directive
+- **Debounced inputs** για user interactions
+- **Lazy loading** για non-critical components
+- **Pagination** για large datasets
+- **Deferred loading** για expensive operations
+
+## Hydration Optimization
+- **Minimal data** σε component properties
+- **Lazy hydration** για complex components
+- **Wire:model.defer** για form inputs
+- **Wire:init** για delayed initialization
+
+## Bundle Optimization
+- **Code splitting** με Vite
+- **Tree shaking** για unused Livewire components
+- **Lazy loading** για component assets
+- **Asset compression** για production
+
+## Performance Monitoring
+- **Livewire devtools** για debugging
+- **Network request** optimization
+- **DOM diffing** optimization
+- **Memory usage** monitoring
+
+```php
+// Livewire caching example
+class ProductList extends Component
+{
+    public function render()
+    {
+        return view('livewire.product-list')
+            ->livewireCache('product-list-' . $this->categoryId, 3600);
+    }
+    
+    public function placeholder()
+    {
+        return view('livewire.product-list-placeholder');
+    }
+}

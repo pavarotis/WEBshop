@@ -1,0 +1,96 @@
+---
+description: Development Storage Setup - Database, Cache, Search & Fallbacks
+globs: ["**/.env*", "**/config/database.php", "**/config/cache.php", "**/config/queue.php"]
+alwaysApply: true
+---
+
+# Development Storage Setup
+
+## Core E-shop Data (MySQL)
+- **Laragon** παρέχει MySQL/MariaDB
+- **Προτίμησε MySQL** στον Laragon για production-like environment
+- **Optional SQLite** μόνο για γρήγορο testing (migrations, CRUD tests)
+- **Λογική**: Όλα τα core tables και migrations δουλεύουν κατευθείαν στο MySQL
+
+## AI Data (MongoDB with Fallback)
+- **MongoDB Community Server** (προαιρετικά) για AI data storage
+- **Fallback**: JSON fields σε MySQL tables για development
+- **Λογική**: Κώδικας δουλεύει με MySQL JSON columns, server αλλάζει σε MongoDB
+
+## Cache / Session / Queue (Redis with Fallback)
+- **Redis server** (Windows port) για caching & queues
+- **Fallback**: File cache + sync queue driver
+- **Configuration**: `CACHE_DRIVER=file`, `QUEUE_CONNECTION=sync`
+- **Λογική**: Jobs τρέχουν αμέσως, δεν χρειάζονται Redis
+
+## Search (Elasticsearch/Meilisearch with Fallback)
+- **Elasticsearch ή Meilisearch** (προαιρετικά) για indexing
+- **Fallback**: MySQL full-text search ή hosted Meilisearch
+- **Λογική**: Development με MySQL search, production με dedicated search
+
+## Development Environment (Laragon)
+
+### Απαραίτητα
+- **Laragon** για PHP + MySQL
+- **Composer** για Laravel dependencies
+- **Node.js + npm/yarn** για frontend build tools (Tailwind, Vite)
+
+### Προαιρετικά (ανάλογα με testing needs)
+- **MongoDB** - AI data storage
+- **Redis** - Cache, sessions, queues
+- **Elasticsearch/Meilisearch** - Search functionality
+
+## Multi-Database Strategy
+- **MySQL/MariaDB** για core business data (users, products, orders, payments)
+- **MongoDB** για AI data (embeddings, recommendations, flexible content)
+- **Redis** για cache, sessions, queue management
+- **Elasticsearch/Meilisearch** για search functionality
+- **Fallback options** για development environment
+
+## Database Selection Rules
+
+### Core Business Data (MySQL)
+```php
+// Users, Products, Orders, Payments
+class Product extends Model
+{
+    protected $connection = 'mysql';
+    protected $fillable = ['name', 'price', 'tenant_id'];
+}
+```
+
+### AI Data (MongoDB with MySQL fallback)
+```php
+// AI responses, embeddings, recommendations
+class AIResponse extends Model
+{
+    protected $connection = 'mongodb'; // Fallback to 'mysql' if not available
+    
+    protected $fillable = ['prompt', 'response', 'metadata'];
+}
+```
+
+### Cache & Queue (Redis with file fallback)
+```php
+// Cache configuration
+CACHE_DRIVER=redis // Fallback to 'file' for development
+QUEUE_CONNECTION=redis // Fallback to 'sync' for development
+```
+
+## Connection Management
+- **Environment-based** connection selection
+- **Fallback detection** για missing services
+- **Service availability** checks
+- **Graceful degradation** όταν services unavailable
+
+## Code Organization
+- **Database-specific models** με proper connections
+- **Service layer** για cross-database operations
+- **Connection switching** για different environments
+- **Fallback implementations** για development
+
+## Performance Considerations
+- **Connection pooling** για production
+- **Query optimization** per database type
+- **Caching strategies** με Redis
+- **Index optimization** για search databases

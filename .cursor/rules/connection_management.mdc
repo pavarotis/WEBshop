@@ -1,0 +1,75 @@
+---
+description: Connection Management & Fallbacks - Centralized Database & Service Management
+globs: ["**/app/Services/Connection/*.php", "**/config/database.php", "**/config/cache.php", "**/.env*"]
+alwaysApply: true
+---
+
+# Connection Management & Fallbacks
+
+## Centralized Connection Manager
+- **Service layer** για connection management
+- **Fallback detection** για missing services
+- **Environment-based** connection selection
+- **Graceful degradation** όταν services unavailable
+- **Connection pooling** για production
+
+```php
+// Connection Manager Service
+class ConnectionManager
+{
+    public function getConnection(string $service): string
+    {
+        return match($service) {
+            'cache' => $this->getCacheConnection(),
+            'queue' => $this->getQueueConnection(),
+            'search' => $this->getSearchConnection(),
+            'ai' => $this->getAIConnection(),
+            default => 'mysql'
+        };
+    }
+    
+    private function getCacheConnection(): string
+    {
+        return Redis::isAvailable() ? 'redis' : 'file';
+    }
+}
+```
+
+## Environment Configuration
+- **Development defaults** με fallbacks
+- **Production configuration** με full services
+- **Service availability** checks
+- **Configuration validation** σε startup
+- **Environment-specific** connection strings
+
+```php
+// Environment-based configuration
+if (app()->environment('local')) {
+    config([
+        'cache.default' => 'file',
+        'queue.default' => 'sync',
+        'database.ai' => 'mysql'
+    ]);
+}
+```
+
+## Fallback Strategies
+- **Redis → File cache** fallback
+- **MongoDB → MySQL JSON** fallback
+- **Elasticsearch → MySQL full-text** fallback
+- **Queue → Sync processing** fallback
+- **Consistent fallback logic** across services
+
+## Service Health Checks
+- **Connection testing** για all services
+- **Health monitoring** για service availability
+- **Automatic failover** για critical services
+- **Service recovery** procedures
+- **Alerting** για service failures
+
+## Performance Considerations
+- **Connection pooling** για production
+- **Connection timeouts** configuration
+- **Retry mechanisms** για failed connections
+- **Circuit breaker** pattern για failing services
+- **Load balancing** για multiple instances

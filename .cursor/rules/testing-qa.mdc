@@ -1,0 +1,87 @@
+---
+description: Testing & Quality Assurance - Strategies, Coverage & CI/CD Guidelines
+globs: ["**/tests/**/*.php", "**/*Test.php", "**/phpunit.xml", "**/.github/workflows/*.yml"]
+alwaysApply: true
+---
+
+# Testing & Quality Assurance
+
+## Testing Strategies
+- **Pest tests** για όλα τα test cases
+- **Feature tests** για API endpoints και user workflows
+- **Unit tests** για business logic και services
+- **Integration tests** για database operations
+- **Browser tests** για frontend functionality
+
+```php
+// Feature test example
+it('can create a product via API', function () {
+    $user = User::factory()->create();
+    
+    $response = $this->actingAs($user)
+        ->postJson('/api/products', [
+            'name' => 'Test Product',
+            'price' => 99.99
+        ]);
+    
+    $response->assertStatus(201)
+        ->assertJsonStructure(['data' => ['id', 'name', 'price']]);
+});
+```
+
+## Test Organization
+- **Test factories** για realistic data generation
+- **Test database** με proper setup/teardown
+- **Test isolation** μεταξύ test cases
+- **Test data cleanup** μεafterEach hooks
+- **Test environment** configuration
+
+```php
+// Factory example
+ProductFactory::new()
+    ->withCategory()
+    ->withImages(3)
+    ->create();
+```
+
+## Code Coverage
+- **Minimum coverage** requirements (80%+)
+- **Critical path** coverage για business logic
+- **Edge case** testing για error scenarios
+- **Integration coverage** για API endpoints
+- **Coverage reporting** με detailed metrics
+
+## Quality Gates
+- **Code quality** checks με PHPStan/Psalm
+- **Security scanning** με Laravel security packages
+- **Performance testing** για critical operations
+- **Accessibility testing** για frontend components
+- **Cross-browser testing** για compatibility
+
+## CI/CD Guidelines
+- **Automated testing** σε pull requests
+- **Code quality** checks σε CI pipeline
+- **Security scanning** σε deployment
+- **Performance regression** testing
+- **Automated deployment** με quality gates
+
+## Testing Best Practices
+- **Test-driven development** (TDD) όπου δυνατό
+- **Mock external services** για unit tests
+- **Realistic test data** με factories
+- **Test documentation** για complex scenarios
+- **Test maintenance** και refactoring
+
+## Error Testing
+- **Exception handling** tests
+- **Error response** validation
+- **Fallback mechanism** testing
+- **Edge case** scenario testing
+- **Error logging** verification
+
+## Performance Testing
+- **Load testing** για API endpoints
+- **Database performance** testing
+- **Cache effectiveness** testing
+- **Memory usage** monitoring
+- **Response time** benchmarking

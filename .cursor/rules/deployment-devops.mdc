@@ -1,0 +1,89 @@
+---
+description: Deployment & DevOps - Environment Configuration, Monitoring & Backup Strategies
+globs: ["**/.env*", "**/docker-compose.yml", "**/Dockerfile", "**/.github/workflows/*.yml", "**/config/app.php"]
+alwaysApply: true
+---
+
+# Deployment & DevOps
+
+## Environment Configuration
+- **Environment-specific** configurations (dev, staging, prod)
+- **Environment variables** για sensitive data
+- **Configuration validation** σε startup
+- **Feature flags** για gradual rollouts
+- **Environment isolation** για security
+
+```php
+// Environment configuration
+if (app()->environment('production')) {
+    // Production-specific settings
+    config(['cache.default' => 'redis']);
+    config(['queue.default' => 'redis']);
+}
+```
+
+## Deployment Strategies
+- **Blue-green deployment** για zero downtime
+- **Rolling deployment** για gradual updates
+- **Database migrations** με backward compatibility
+- **Asset deployment** με CDN integration
+- **Health checks** για deployment validation
+
+## Monitoring & Logging
+- **Application monitoring** με Laravel Telescope
+- **Error tracking** με Sentry ή Bugsnag
+- **Performance monitoring** με APM tools
+- **Log aggregation** με centralized logging
+- **Alerting** για critical issues
+
+```php
+// Structured logging
+Log::channel('application')->info('User action', [
+    'user_id' => $user->id,
+    'action' => 'product_view',
+    'product_id' => $product->id,
+    'timestamp' => now()
+]);
+```
+
+## Backup Strategies
+- **Database backups** με automated scheduling
+- **File storage backups** για uploaded content
+- **Configuration backups** για environment settings
+- **Backup verification** και testing
+- **Disaster recovery** procedures
+
+## Security in Deployment
+- **SSL/TLS** configuration για HTTPS
+- **Security headers** implementation
+- **API key rotation** procedures
+- **Access control** για production environments
+- **Security scanning** σε deployment pipeline
+
+## Infrastructure Management
+- **Server provisioning** με Infrastructure as Code
+- **Load balancing** για high availability
+- **Auto-scaling** για traffic spikes
+- **Resource monitoring** και optimization
+- **Cost optimization** strategies
+
+## CI/CD Pipeline
+- **Automated testing** σε pull requests
+- **Code quality** checks σε CI
+- **Security scanning** σε deployment
+- **Performance regression** testing
+- **Automated rollback** για failed deployments
+
+## Environment Management
+- **Development environment** setup
+- **Staging environment** για testing
+- **Production environment** configuration
+- **Environment synchronization** procedures
+- **Configuration drift** prevention
+
+## Maintenance & Updates
+- **Dependency updates** με security patches
+- **Framework updates** με compatibility testing
+- **Database maintenance** procedures
+- **Performance optimization** cycles
+- **Security updates** με immediate deployment

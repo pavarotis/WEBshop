@@ -1,0 +1,101 @@
+---
+description: Security Policies & Access Control - Standardized Policies, Error Responses & Upload Limits
+globs: ["**/app/Policies/*.php", "**/app/Http/Controllers/*.php", "**/app/Http/Requests/*.php", "**/config/filesystems.php"]
+alwaysApply: true
+---
+
+# Security Policies & Access Control
+
+## Policy Standardization
+- **Consistent naming** conventions για policies
+- **Policy grouping** με logical organization
+- **Standardized methods** (view, create, update, delete)
+- **Multi-tenant policies** με tenant context
+- **Global resource policies** για admin features
+
+```php
+// Standardized policy structure
+class ProductPolicy
+{
+    public function viewAny(User $user): bool
+    {
+        return $user->hasPermission('products.view');
+    }
+    
+    public function view(User $user, Product $product): bool
+    {
+        return $product->tenant_id === $user->tenant_id;
+    }
+    
+    public function create(User $user): bool
+    {
+        return $user->hasPermission('products.create');
+    }
+}
+```
+
+## Centralized Error Responses
+- **Consistent API error** formatting
+- **Standardized HTTP status** codes
+- **Error message** standardization
+- **Multi-language support** για error messages
+- **Error logging** με proper context
+
+```php
+// Centralized error response
+class ErrorResponse
+{
+    public static function unauthorized(string $message = 'Unauthorized'): JsonResponse
+    {
+        return response()->json([
+            'error' => 'unauthorized',
+            'message' => $message,
+            'timestamp' => now()
+        ], 401);
+    }
+}
+```
+
+## File Upload Security
+- **File type validation** με MIME type checking
+- **File size limits** per tenant
+- **Upload path security** εκτός public directory
+- **Virus scanning** για uploaded files
+- **Storage encryption** για sensitive files
+
+```php
+// File upload validation
+class FileUploadRequest extends FormRequest
+{
+    public function rules(): array
+    {
+        return [
+            'file' => [
+                'required',
+                'file',
+                'max:' . $this->getMaxFileSize(),
+                'mimes:jpg,jpeg,png,pdf,doc,docx'
+            ]
+        ];
+    }
+    
+    private function getMaxFileSize(): int
+    {
+        return auth()->user()->tenant->max_file_size ?? 10240; // KB
+    }
+}
+```
+
+## Access Control Best Practices
+- **Role-based permissions** με Spatie Laravel Permission
+- **Resource-level permissions** για granular control
+- **Tenant isolation** για multi-tenant data
+- **API rate limiting** per user/tenant
+- **Session management** με proper security
+
+## Security Monitoring
+- **Failed access attempts** tracking
+- **Suspicious activity** detection
+- **Security event logging** για audit trail
+- **Real-time alerts** για security breaches
+- **Compliance reporting** για GDPR/PCI DSS
